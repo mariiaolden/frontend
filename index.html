@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>Верстка макета</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <form action="https://60376bfd5435040017722533.mockapi.io/form" method="POST" class="user-form">
+            <h3 class="user-form__title">Задай вопрос</h3>
+            <input type="text" required pattern="[а-яА-Я0-9 -]+" placeholder="Фамилия Имя Отчество *" name="name" class="user-form__input">
+            <input type="text" required pattern="[0-9 -+]+" placeholder="Телефон *" name="phone" class="user-form__input">
+            <input type="email" required placeholder="E-mail *" name="email" class="user-form__input">
+            <button type="submit" id="sendForm">Отправить запрос</button>
+        </form>
+        <script>
+            function randomInteger(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            document.getElementById('sendForm').addEventListener(
+                'click',
+                function (e) {
+                    e.preventDefault();
+
+                    event.preventDefault();
+                    var form = document.querySelector('.user-form');
+
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 201) {
+                           var json = JSON.parse(this.responseText);
+                           alert(json.text);
+                        }
+                        if (this.readyState == 4 && this.status == 404) {
+                            alert(this.responseText);
+                        }
+                    };
+
+                    var url = form.getAttribute('action');
+
+                    if (randomInteger(0, 1)) {
+                        url = 'https://60376bfd5435040017722533.mockapi.io/formRej';
+                    }
+
+                    xhttp.open("POST", url, true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                    var data = new FormData(form);
+                    var query = new URLSearchParams(Array.from(data)).toString();
+                    
+
+                    xhttp.send(query);
+                }
+            );
+        </script>
+    </body>
+</html>
